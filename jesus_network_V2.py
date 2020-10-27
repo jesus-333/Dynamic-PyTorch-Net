@@ -269,7 +269,7 @@ class DynamicCNN(nn.Module):
         x = self.flatten_layer(x)
         
         # Feed-forward (linear) section
-        x = self.ff(x)
+        if(len(self.ff) > 0): x = self.ff(x)
         
         return x
 
