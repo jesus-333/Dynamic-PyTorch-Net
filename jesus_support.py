@@ -29,7 +29,7 @@ def getActivationList():
     act.append(nn.SELU())       # 4
     act.append(nn.Hardshrink()) # 5
     act.append(nn.Hardtanh())   # 6
-    act.append(nn.LogSoftmax)   # 7
+    act.append(nn.LogSoftmax()) # 7
     act.append(nn.ELU())        # 8
     act.append(nn.Softmax())    # 9
     
