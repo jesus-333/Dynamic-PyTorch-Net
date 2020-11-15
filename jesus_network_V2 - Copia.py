@@ -4,7 +4,7 @@
 import torch
 from torch import nn
 
-from support_DynamicNet import getActivationList, getPoolingList, convOutputShape
+from jesus_support import getActivationList, getPoolingList, convOutputShape
 
 import numpy as np
 from tqdm import tqdm
@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 class DynamicCNN(nn.Module):
     
-    def __init__(self, parameters, print_var = False, tracking_input_dimension = False):
+    def __init__(self, parameters, print_var = False):
         super().__init__()
         
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -38,7 +38,7 @@ class DynamicCNN(nn.Module):
             activation_list = parameters["activation_list"] 
             
             # Check activation list length (N.B the +1 is added because there is the flatten layer between the cnn and the feed-forward part)
-            if(len(activation_list) != layers_cnn + layers_ff + 1): raise Exception("wrong number of elements in activation_list") 
+            if(len(activation_list) != layers_cnn + layers_ff + 1):raise Exception("wrong number of elements in activation_list") 
             
             # Create the activation list of the two part of the network
             activation_list_cnn = activation_list[0:layers_cnn]
@@ -54,7 +54,7 @@ class DynamicCNN(nn.Module):
             kernel_list = convertTupleElementToInt(parameters["kernel_list"])
             
             # Check kernel list length
-            if(len(kernel_list) != layers_cnn): raise Exception("Wrong number of elements in kernel_list")
+            if(len(kernel_list) != layers_cnn):raise Exception("Wrong number of elements in kernel_list")
             
             if(print_var): print("Kernels:             {}".format(kernel_list))
         else: 
@@ -65,7 +65,7 @@ class DynamicCNN(nn.Module):
             filters_list = convertTupleElementToInt(parameters["filters_list"])
             
             # Check filter list length
-            if(len(filters_list) != layers_cnn): raise Exception("Wrong number of elements in filters_list") 
+            if(len(filters_list) != layers_cnn):raise Exception("Wrong number of elements in filters_list") 
             
             if(print_var): print("Filters/Channels:    {}".format(filters_list))
         else: 
@@ -76,7 +76,7 @@ class DynamicCNN(nn.Module):
             stride_list = convertTupleElementToInt(parameters["stride_list"])
             
             # Check stride list length
-            if(len(stride_list) != layers_cnn): raise Exception("Wrong number of elements in stride_list") 
+            if(len(stride_list) != layers_cnn):raise Exception("Wrong number of elements in stride_list") 
             
             if(print_var): print("Stride List:         {}".format(stride_list))
         else: 
@@ -89,7 +89,7 @@ class DynamicCNN(nn.Module):
             padding_list = convertTupleElementToInt(parameters["padding_list"])
             
             # Check padding list length
-            if(len(padding_list) != layers_cnn): raise Exception("Wrong number of elements in padding_list") 
+            if(len(padding_list) != layers_cnn):raise Exception("Wrong number of elements in padding_list") 
             
             if(print_var): print("Padding List:        {}".format(padding_list))
         else: 
@@ -102,7 +102,7 @@ class DynamicCNN(nn.Module):
             pooling_list = parameters["pooling_list"]
             
             # Check pooling length
-            if(len(pooling_list) != layers_cnn): raise Exception("Wrong number of elements in pooling_list")
+            if(len(pooling_list) != layers_cnn):raise Exception("Wrong number of elements in pooling_list")
             
             if(print_var): print("Pooling List:        {}".format(pooling_list))
         else: 
@@ -115,7 +115,7 @@ class DynamicCNN(nn.Module):
             groups_list = parameters["groups_list"]
             
             # Check group length
-            if(len(groups_list) != layers_cnn): raise Exception("Wrong number of elements in group_list")
+            if(len(groups_list) != layers_cnn):raise Exception("Wrong number of elements in group_list")
             
             if(print_var): print("Groups List:         {}".format(groups_list))
         else: 
@@ -128,7 +128,7 @@ class DynamicCNN(nn.Module):
             CNN_normalization_list = parameters["CNN_normalization_list"]
             
             # Check batch_normalization_list list length
-            if(len(CNN_normalization_list) != layers_cnn): raise Exception("Wrong number of elements in CNN_normalization_list")
+            if(len(CNN_normalization_list) != layers_cnn):raise Exception("Wrong number of elements in CNN_normalization_list")
             
             if(print_var): print("CNN Normalization:   {}".format(CNN_normalization_list))
         else: 
@@ -142,7 +142,7 @@ class DynamicCNN(nn.Module):
             dropout_list = parameters["dropout_list"]
             
             # Check pooling length
-            if(len(dropout_list) != layers_cnn + layers_ff + 1): raise Exception("Wrong number of elements in dropout_list")
+            if(len(dropout_list) != layers_cnn + layers_ff + 1):raise Exception("Wrong number of elements in dropout_list")
             
             dropout_list_cnn = dropout_list[0:layers_cnn]
             dropout_list_ff = dropout_list[(layers_cnn + 1):]
@@ -164,25 +164,18 @@ class DynamicCNN(nn.Module):
             neurons_list = parameters["neurons_list"]
             
             # Check activation list length
-            if(len(neurons_list) != layers_ff): raise Exception("Wrong number of elements in neurons_list") 
+            if(len(neurons_list) != layers_ff):raise Exception("Wrong number of elements in neurons_list") 
             
-            if(print_var): print("Neurons List:        {}".format(neurons_list))
+            if(print_var): print("Neurons List:        {}\n".format(neurons_list))
         else: 
             # raise Exception("No \"Neurons_list\" key inside the paramters dictionary")
             neurons_list = []
-            if(print_var): print("Neurons List:        {}".format(neurons_list))
-        
-        # Add a empty line
-        if(print_var): print()
         
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         # CNN Construction
         
         # Temporary variable used to track the change in dimensions of the input
         tmp_input = torch.ones((1, filters_list[0][0], parameters["h"], parameters["w"]))
-        if(tracking_input_dimension): 
-            print("# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ")
-            print(tmp_input.shape, "\n")
         
         # Temporay list to store the layer
         tmp_list = []
@@ -198,11 +191,6 @@ class DynamicCNN(nn.Module):
             
             # Keep track of the outupt dimension
             tmp_input = tmp_cnn_layer(tmp_input)
-            
-            # Print the input dimensions at this step (if tracking_input_dimension is True)
-            if(tracking_input_dimension): 
-                print(tmp_cnn_layer)
-                print(tmp_input.shape, "\n")
             
             # (OPTIONAL) add batch normalization
             if(normalization): tmp_list.append(nn.BatchNorm2d(num_features = int(n_filter[1])))
@@ -223,19 +211,11 @@ class DynamicCNN(nn.Module):
                 # Keep track of the output dimension
                 tmp_input = tmp_pooling_layer(tmp_input)
                 
-                # Print the input dimensions at this step (if tracking_input_dimension is True)
-                if(tracking_input_dimension): 
-                    print(tmp_pooling_layer)
-                    print(tmp_input.shape, "\n")
-                
             # (OPTIONAL) Dropout
             if(p_dropout > 0 and p_dropout < 1): tmp_list.append(torch.nn.Dropout(p = p_dropout))
             
         # Creation of the sequential object to store all the layer
         self.cnn = nn.Sequential(*tmp_list)
-        
-        # Plot a separator
-        if(tracking_input_dimension): print("# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #\n")
         
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         # Flatten layer
@@ -246,10 +226,9 @@ class DynamicCNN(nn.Module):
             if(activation_flatten != -1): self.flatten_layer = act[activation_flatten]
             else: self.flatten_layer = nn.Identity()
             
-            if(print_var): print("Flatten layer:       {}\n".format(self.flatten_neurons))
+            if(print_var): print("Flatten layer:       {}".format(self.flatten_neurons))
         else:
-            if(layers_ff == 1): tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0])
-            else: tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0][0])
+            tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0][0])
             
             tmp_list = []
             tmp_list.append(tmp_flatten_layer)
@@ -259,30 +238,26 @@ class DynamicCNN(nn.Module):
     
             self.flatten_layer = nn.Sequential(*tmp_list)
         
-            if(print_var): 
-                if(layers_ff == 1): print("Flatten layer:       {}\n".format([self.flatten_neurons, neurons_list[0]]))
-                else: print("Flatten layer:       {}\n".format([self.flatten_neurons, neurons_list[0][0]]))
+            if(print_var): print("Flatten layer:       {}".format([self.flatten_neurons, neurons_list[0][0]]))
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         # Feed-Forward (Linear) construction
         
-        if(layers_ff > 1):
-            # Temporay list to store the layer
-            tmp_list = []
+        # Temporay list to store the layer
+        tmp_list = []
+        
+        # Construction cycle
+        for neurons, activation, p_dropout in zip(neurons_list, activation_list_ff, dropout_list_ff):
+            tmp_linear_layer = nn.Linear(neurons[0], neurons[1])
+            tmp_list.append(tmp_linear_layer)
             
-            # Construction cycle
-            for neurons, activation, p_dropout in zip(neurons_list, activation_list_ff, dropout_list_ff):
-                tmp_linear_layer = nn.Linear(neurons[0], neurons[1])
-                tmp_list.append(tmp_linear_layer)
-                
-                # (OPTIONAL) Add the activation 
-                if(activation != -1): tmp_list.append(act[activation])
-                
-                # (OPTIONAL) Dropout
-                if(p_dropout > 0 and p_dropout < 1): tmp_list.append(torch.nn.Dropout(p = p_dropout))
+            # (OPTIONAL) Add the activation 
+            if(activation != -1): tmp_list.append(act[activation])
             
-            # Creation of the sequential object to store all the layer
-            self.ff = nn.Sequential(*tmp_list)
-        else: self.ff = []
+            # (OPTIONAL) Dropout
+            if(p_dropout > 0 and p_dropout < 1): tmp_list.append(torch.nn.Dropout(p = p_dropout))
+        
+        # Creation of the sequential object to store all the layer
+        self.ff = nn.Sequential(*tmp_list)
         
         
     def forward(self, x):
