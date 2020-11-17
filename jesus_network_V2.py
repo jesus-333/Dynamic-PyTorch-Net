@@ -16,6 +16,9 @@ class DynamicCNN(nn.Module):
     def __init__(self, parameters, print_var = False, tracking_input_dimension = False):
         super().__init__()
         
+        self.print_var = print_var
+        self.tracking_input_dimension = tracking_input_dimension
+        
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         # Parameters recovery and check
         
@@ -141,7 +144,7 @@ class DynamicCNN(nn.Module):
         if("dropout_list" in parameters.keys()): 
             dropout_list = parameters["dropout_list"]
             
-            # Check pooling length
+            # Check dropout list length
             if(len(dropout_list) != layers_cnn + layers_ff + 1): raise Exception("Wrong number of elements in dropout_list")
             
             dropout_list_cnn = dropout_list[0:layers_cnn]
@@ -158,6 +161,29 @@ class DynamicCNN(nn.Module):
             dropout_flatten = dropout_list[layers_cnn]
             
             if(print_var): print("Dropout List:        {}".format(dropout_list))
+            
+        # Set bias list
+        if("bias_list" in parameters.keys()): 
+            bias_list = parameters["bias_list"]
+            
+            # Check bias list length
+            if(len(bias_list) != layers_cnn + layers_ff + 1): raise Exception("Wrong number of elements in bias_list")
+            
+            bias_list_cnn = bias_list[0:layers_cnn]
+            bias_list_ff = bias_list[(layers_cnn + 1):]
+            bias_list_flatten = bias_list[layers_cnn]
+            
+            if(print_var): print("Bias List:           {}".format(bias_list))
+        else: 
+            # If no pooling provided create a vector of negative number so no pool layer will be added
+            bias_list = np.ones(layers_cnn + layers_ff + 1).astype(int) * -1
+            bias_list = bias_list < 1000
+            
+            bias_list_cnn = bias_list[0:layers_cnn]
+            bias_list_ff = bias_list[(layers_cnn + 1):]
+            bias_list_flatten = bias_list[layers_cnn]
+            
+            if(print_var): print("Bias List:           {}".format(bias_list))
         
         # Set neuron list
         if("neurons_list" in parameters.keys()): 
@@ -188,11 +214,11 @@ class DynamicCNN(nn.Module):
         tmp_list = []
 
         # Construction cycle
-        for kernel, n_filter, stride, padding, pool, activation, normalization, p_dropout, groups in zip(kernel_list, filters_list, stride_list, padding_list, pooling_list, activation_list_cnn, CNN_normalization_list, dropout_list_cnn, groups_list):
+        for kernel, n_filter, stride, padding, pool, activation, normalization, p_dropout, groups, bias in zip(kernel_list, filters_list, stride_list, padding_list, pooling_list, activation_list_cnn, CNN_normalization_list, dropout_list_cnn, groups_list, bias_list_cnn):
             
             # Create the convolutional layer and add to the list
-            if(groups == 1): tmp_cnn_layer = nn.Conv2d(in_channels = int(n_filter[0]), out_channels = int(n_filter[1]), kernel_size = kernel, stride = stride, padding = padding)
-            else: tmp_cnn_layer = nn.Conv2d(in_channels = int(n_filter[0]), out_channels = int(n_filter[1]), kernel_size = kernel, stride = stride, padding = padding, groups = groups)
+            if(groups == 1): tmp_cnn_layer = nn.Conv2d(in_channels = int(n_filter[0]), out_channels = int(n_filter[1]), kernel_size = kernel, stride = stride, padding = padding, bias = bias)
+            else: tmp_cnn_layer = nn.Conv2d(in_channels = int(n_filter[0]), out_channels = int(n_filter[1]), kernel_size = kernel, stride = stride, padding = padding, groups = groups, bias = bias)
             
             tmp_list.append(tmp_cnn_layer)
             
@@ -226,7 +252,7 @@ class DynamicCNN(nn.Module):
                 # Print the input dimensions at this step (if tracking_input_dimension is True)
                 if(tracking_input_dimension): 
                     print(tmp_pooling_layer)
-                    print(tmp_input.shape, "\n")
+                    print(tmp_input.shape)
                 
             # (OPTIONAL) Dropout
             if(p_dropout > 0 and p_dropout < 1): tmp_list.append(torch.nn.Dropout(p = p_dropout))
@@ -248,8 +274,8 @@ class DynamicCNN(nn.Module):
             
             if(print_var): print("Flatten layer:       {}\n".format(self.flatten_neurons))
         else:
-            if(layers_ff == 1): tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0])
-            else: tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0][0])
+            if(layers_ff == 1): tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0], bias = bias_list_flatten)
+            else: tmp_flatten_layer = nn.Linear(self.flatten_neurons, neurons_list[0][0], bias = bias_list_flatten)
             
             tmp_list = []
             tmp_list.append(tmp_flatten_layer)
@@ -270,8 +296,8 @@ class DynamicCNN(nn.Module):
             tmp_list = []
             
             # Construction cycle
-            for neurons, activation, p_dropout in zip(neurons_list, activation_list_ff, dropout_list_ff):
-                tmp_linear_layer = nn.Linear(neurons[0], neurons[1])
+            for neurons, activation, p_dropout, bias in zip(neurons_list, activation_list_ff, dropout_list_ff, bias_list_ff):
+                tmp_linear_layer = nn.Linear(neurons[0], neurons[1], bias = bias)
                 tmp_list.append(tmp_linear_layer)
                 
                 # (OPTIONAL) Add the activation 
@@ -297,7 +323,61 @@ class DynamicCNN(nn.Module):
         if(len(self.ff) > 0): x = self.ff(x)
         
         return x
-
+    
+    
+    def printNetwork(self, separator = False):
+        depth = 0
+        
+        # Iterate through the module of the network
+        for name, module in self.named_modules():
+            
+            # Iterate through the sequential block
+            # Since in the iteration the sequential blocks and the modules inside the sequential block appear twice I only take the sequenial block
+            if(type(module) == torch.nn.modules.container.Sequential):
+                for layer in module:
+                    
+                    # Print layer
+                    print("DEPTH:", depth, "\t- ", layer)
+                    
+                    # Incrase depth
+                    depth += 1
+                
+                if(separator): print("\n- - - - - - - - - - - - - - - - - - - - - - - - - - - \n")
+                
+                if(name == 'cnn'):
+                    # Add reshape "layer"
+                    print("DEPTH:", depth, "\t- ", "x.view([x.size(0), -1])")
+                    if(separator): print("\n- - - - - - - - - - - - - - - - - - - - - - - - - - - \n")
+                    depth += 1
+    
+    
+    def getMiddleResults(self, x, input_depth, ignore_dropout = True):
+        actual_depth = 0
+        
+        # Iterate through the module of the network
+        for name, module in self.named_modules():
+            
+            # Iterate through the sequential block
+            # Since in the iteration the sequential blocks and the modules inside the sequential block appear twice I only take the sequenial block
+            if(type(module) == torch.nn.modules.container.Sequential):
+                for layer in module:
+                    # Evaluate the value of the input at this level
+                    x = layer(x)
+                    
+                    # If I reach the desire level I stop
+                    if(actual_depth == input_depth): return x
+                    
+                    # Increase depth level
+                    actual_depth += 1
+                
+                # Reshape after the CNN block
+                if(name == 'cnn'): 
+                    x = x.view([x.size(0), -1])
+                    if(actual_depth == input_depth): return x
+                    actual_depth += 1
+        
+        # If this istruction is reached it means that the input flow inside all the network. 
+        return x
         
 #%%
 
