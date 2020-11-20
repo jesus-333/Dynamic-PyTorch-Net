@@ -60,3 +60,8 @@ Also, if you want ot obtain the input after be passed through only a part of the
 I provided 4 different files where I create some network with my *DynamicNet*. In the firs I recreate the [EEGNet](https://arxiv.org/abs/1611.08024) a famouse network used to analyze EEG signal. In the second and the third I create the networks presented in the work of [Sakhavi et al.](https://ieeexplore.ieee.org/document/8310961). In the last file I simple set up everything at random and a random network will be created.
 
 N.B. The file must be in the same folder of *DynamicNet.py* and *support_DynamicNet.py*  
+
+# Citation
+https://paypal.me/AlbertoZancanaro?locale.x=it_IT
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/AlbertoZancanaro?locale.x=it_IT)
