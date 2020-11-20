@@ -2,7 +2,7 @@ import numpy as np
 
 import torch
 
-from jesus_network_V2 import DynamicCNN, convertArrayInTupleList
+from DynamicNet import DynamicCNN, convertArrayInTupleList
 
 #%%
 
@@ -29,7 +29,7 @@ parameters["w"] = T
 parameters["layers_cnn"] = 4 
 parameters["layers_ff"] = 0
 
-parameters["activation_list"] = [-1, 8, -1, 8, 9]
+parameters["activation_list"] = [-1, 0, -1, 8, 9]
 
 parameters["kernel_list"] = [kernel_1, kernel_2, kernel_3, kernel_4]
 

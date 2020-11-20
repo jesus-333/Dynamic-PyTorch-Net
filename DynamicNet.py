@@ -308,13 +308,16 @@ class DynamicCNN(nn.Module):
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         # Feed-Forward (Linear) construction
         
-        if(layers_ff >= 1):
+        if(layers_ff > 1):
             # Temporay list to store the layer
             tmp_list = []
             
             # Construction cycle
             for neurons, activation, p_dropout, bias in zip(neurons_list, activation_list_ff, dropout_list_ff, bias_list_ff):
-                tmp_linear_layer = nn.Linear(neurons[0], neurons[1], bias = bias)
+                if(layers_ff == 1 and layers_cnn == 0): # Case for a single layer feed-forward network (perceptron style)
+                    tmp_linear_layer = nn.Linear(parameters["h"] * parameters["w"], neurons, bias = bias)
+                else:
+                    tmp_linear_layer = nn.Linear(neurons[0], neurons[1], bias = bias)
                 tmp_list.append(tmp_linear_layer)
                 
                 # (OPTIONAL) Add the activation 
