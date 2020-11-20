@@ -57,5 +57,6 @@ The class is also provided with a method called *printNetwork()* that print all 
 Also, if you want ot obtain the input after be passed through only a part of the network, the class provide a the *getMiddleResults()* method. With this method you send in input a data *x*, specify the depth (see previous paragraph) and you will obtain how the input will be at that level of depth.
 
 ## Examples
-I provided 4 different file where I create some network with my *DynamicNet*.
-  
+I provided 4 different files where I create some network with my *DynamicNet*. In the firs I recreate the [EEGNet](https://arxiv.org/abs/1611.08024) a famouse network used to analyze EEG signal. In the second and the third I create the networks presented in the work of [Sakhavi et al.](https://ieeexplore.ieee.org/document/8310961). In the last file I simple set up everything at random and a random network will be created.
+
+N.B. The file must be in the same folder of *DynamicNet.py* and *support_DynamicNet.py*  
