@@ -1,4 +1,4 @@
-# Dynamic PyTorch CNN
+# Dynamic PyTorch Neural Networks (DPNN)
 
 I this repository I upload a class that allow to create in automatic a Convolutional-Neural-Network (CNN) or a Feed-Forward-Neural-Network in PyTorch.
 
