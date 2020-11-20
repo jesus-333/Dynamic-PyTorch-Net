@@ -9,4 +9,13 @@ In this way the design of the network can be far more easy, especially for beggi
 
 Keep in mind that this is a relative simple project. You can create (at least for now) only standard convolutional and feed-forward network. So no convolutional autoencoder (autoencoder with only feed-forward network can be created), GANs, Boltzman Machine or network with multiple branch. The image below show the type of network you can create with my script.
 
-![Whic network can you create?](https://github.com/jesus-333/Dynamic-PyTorch-CNN/blob/main/docs/scheme_what_you_can_do.jpg)
+![Which network can you create?](https://github.com/jesus-333/Dynamic-PyTorch-CNN/blob/main/docs/scheme_what_you_can_do.jpg)
+
+## Tutorial
+In this section I will explain how to use my class to create your network. All the class is based on receiving a dicitionary (that I will call *parameters*) as input. I will divide the section in three parts: 1) *parameters* for the convolutional part of the network 2) *parameters* for the feed forward part of the network 3) *parameters* in common between the two parts. Each section will be structured as list of keys for the dicionary. The first word in italic will be the name of the key and then a description will follow.
+
+### Convolutional Section
+* *layers_cnn*: pretty straightforward. This is the number of convolutional layer. Must be an int.
+* *kernel_list*: list of tuple. Each tuple represent the dimension of the kernel for the current layer. Each kernel must be sepcified as (heigh, width). It must have a length equals to *layers_cnn*
+* *filters_list*: list of tuple. Each tuple represent the number of input channel of the current layer and the number of output channel of the layer. For example if you use BGR image as input and you want 9 channel at the end of the first convolution you must write the tuple as (3,9). In case you're lazy (like me) I provided a support function called *convertArrayInTupleList()* that you can use to convert a list of filter in the list of tuple necessary for the network. In this case you only need to specify the ouput filter for each layer (plus the number of input channel). So for example, always with a BGR image as input, you want to perform 3 convolution with, respectively, 9, 27 and 54 as outuput filters. So you can write your *filters_list* as [3, 9, 27, 54]  and the function will convert your list in [(3, 9), (9, 27), (27, 54)].
+* *stride_list*: list of tuple. If you don't know what it is stride don't bother and left it empty. 
