@@ -49,4 +49,13 @@ N.B. You can avoid to create all the field with (OPTIONAL) if you don't bother. 
 * *dropout_list*: list of float. Specify the dropout probability for each layer. If the entry for the corresponding layer is -1 no dropout will be used. It must have a length of *layers_cnn* + *layers_ff* + 1.
 * *bias_list*: list of bool. Specify if use or not the bias for the current layer (for both cnn section and feed-forward section). It must have a length of *layers_cnn* + *layers_ff* + 1.
   
+N.B. For more info about the various activation function or search for new activaion read this [link](https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity).
+
+## Network and Features visualization
+The class is also provided with a method called *printNetwork()* that print all the structure of the network showing also the "depth" of each layer (pay attention that every transformation of the input will increase the depth of one... for example if we have a convolution followed by a normalizationa and an activation the convolution will be at depth 0, the normalization at depth 1 and the activation at depth 2).
+
+Also, if you want ot obtain the input after be passed through only a part of the network, the class provide a the *getMiddleResults()* method. With this method you send in input a data *x*, specify the depth (see previous paragraph) and you will obtain how the input will be at that level of depth.
+
+## Examples
+I provided 4 different file where I create some network with my *DynamicNet*.
   
