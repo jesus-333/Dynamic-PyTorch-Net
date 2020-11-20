@@ -5,8 +5,6 @@ from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Subset
 
 import numpy as np
-import matplotlib.pyplot as plt
-import random
 import math
 import pickle
 
@@ -22,16 +20,20 @@ def getActivationList():
         
     #Define the activation function
     act = []
-    act.append(nn.Sigmoid())    # 0
-    act.append(nn.ReLU())       # 1
-    act.append(nn.LeakyReLU())  # 2
-    act.append(nn.Tanh())       # 3
-    act.append(nn.SELU())       # 4
-    act.append(nn.Hardshrink()) # 5
-    act.append(nn.Hardtanh())   # 6
-    act.append(nn.LogSoftmax()) # 7
-    act.append(nn.ELU())        # 8
-    act.append(nn.Softmax())    # 9
+   
+    act.append(nn.ReLU())       # 0
+    act.append(nn.LeakyReLU())  # 1
+    act.append(nn.SELU())       # 2
+    act.append(nn.ELU())        # 3
+    act.append(nn.GELU())       # 4
+    
+    act.append(nn.Sigmoid())    # 5
+    act.append(nn.Tanh())       # 6
+    act.append(nn.Hardtanh())   # 7
+    act.append(nn.Hardshrink()) # 8
+    
+    act.append(nn.LogSoftmax(dim = 1)) # 9
+    act.append(nn.Softmax(dim = 1))    # 10
     
     return act
 
