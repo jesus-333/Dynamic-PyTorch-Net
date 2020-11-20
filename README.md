@@ -9,4 +9,4 @@ In this way the design of the network can be far more easy, especially for beggi
 
 Keep in mind that this is a relative simple project. You can create (at least for now) only standard convolutional and feed-forward network. So no convolutional autoencoder (autoencoder with only feed-forward network can be created), GANs, Boltzman Machine or network with multiple branch. The image below show the type of network you can create with my script.
 
-![](https://github.com/jesus-333/Dynamic-PyTorch-CNN/blob/main/docs/scheme_what_you_can_do.jpg)
+![Whic network can you create?](https://github.com/jesus-333/Dynamic-PyTorch-CNN/blob/main/docs/scheme_what_you_can_do.jpg)
