@@ -13,7 +13,7 @@ Keep in mind that this is a relative simple project. You can create (at least fo
 
 
 ## Tutorial
-In this section I will explain how to use my class to create your network. All the class is based on receiving a dicitionary (that I will call *parameters*) as input. I will divide the section in three parts: 1) *parameters* for the convolutional part of the network 2) *parameters* for the feed forward part of the network 3) *parameters* in common between the two parts. Each section will be structured as list of keys for the dicionary. The first word in italic will be the name of the key and then a description will follow.
+In this section I will explain how to use my class to create your network. All the class is based on receiving a dictionary (that I will call *parameters*) as input. I will divide the section in three parts: 1) *parameters* for the convolutional part of the network 2) *parameters* for the feed forward part of the network 3) *parameters* in common between the two parts. Each section will be structured as list of keys for the dicionary. The first word in italic will be the name of the key and then a description will follow.
 
 
 ### Convolutional Parameters
