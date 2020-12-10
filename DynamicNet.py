@@ -208,7 +208,7 @@ class DynamicCNN(nn.Module):
             # Check activation list length
             if(len(neurons_list) != layers_ff): raise Exception("Wrong number of elements in neurons_list") 
             
-            neurons_list = convertArrayInTupleList(neurons_list)
+            if(layers_ff != 1): neurons_list = convertArrayInTupleList(neurons_list)
             
             if(print_var): print("Neurons List:        {}".format(neurons_list))
         else: 
