@@ -7,7 +7,7 @@ Why create somthing similar? Well basically becasue it didn't exist (or at least
 
 In this way the design of the network can be far more easy, especially for begginer that might just want create their first network. But also if you are an expert and you're bored to write every time the entire class, specify the forward method, the constructor etc etc. Or maybe you have to test various network that differ only for a few parameter... in this case you only change some component of the dictionary and the work is done.
 
-Keep in mind that this is a relative simple project. You can create (at least for now) only standard convolutional and feed-forward network. So no convolutional autoencoder (autoencoder with only feed-forward network can be created), GANs, Boltzman Machine or network with multiple branch. The image below show the type of network you can create with my script.
+Keep in mind that this is a relative simple project. You can create (at least for now) only standard convolutional and feed-forward network. So no convolutional autoencoder (autoencoder with only feed-forward network can be created), GANs, Boltzman Machine or network with multiple branch. The image below show the type of network you can create with my script. If you want you can create single part of this more complicated network with my tool and then stick all together inside a new class.
 
 ![Which network can you create?](https://github.com/jesus-333/Dynamic-PyTorch-CNN/blob/main/docs/scheme_what_you_can_do.jpg)
 
