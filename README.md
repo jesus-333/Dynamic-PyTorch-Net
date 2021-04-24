@@ -63,5 +63,3 @@ N.B. The file must be in the same folder of *DynamicNet.py* and *support_Dynamic
 
 # Citation
 If you use this project please cite me and share this repository :pray: :heart:
-
-[//]: # ([![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/AlbertoZancanaro?locale.x=it_IT))
