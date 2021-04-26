@@ -241,7 +241,7 @@ class DynamicCNN(nn.Module):
             
             if(print_var): print("Bias List:           {}".format(bias_list))
         
-        # Set neuron list
+        # Set neurons list
         if("neurons_list" in parameters.keys()): 
             neurons_list = parameters["neurons_list"]
             
