@@ -29,7 +29,7 @@ parameters["w"] = T
 parameters["layers_cnn"] = 4 
 parameters["layers_ff"] = 1
 
-# First layer withi no activation
+# First layer with no activation
 parameters["activation_list"] = [-1, 0, -1, 0, 9, 9]
 
 # First layer with linear combination of channel as activation
