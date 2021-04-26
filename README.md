@@ -1,4 +1,4 @@
-# Dynamic PyTorch Neural Networks (DPNN)
+# Dynamic PyTorch Neural Networks or DynamicNet
 
 I this repository I upload a class that allow to create in automatic a Convolutional-Neural-Network (CNN) or a Feed-Forward-Neural-Network in PyTorch. I upload a short video demonstration on YouTube at this [link](https://youtu.be/hS7DnarmL-M).
 
@@ -7,7 +7,7 @@ Why create somthing similar? Well basically becasue it didn't exist (or at least
 
 In this way the design of the network can be far more easy, especially for begginer that might just want create their first network. But also if you are an expert and you're bored to write every time the entire class, specify the forward method, the constructor etc etc. Or maybe you have to test various network that differ only for a few parameter... in this case you only change some component of the dictionary and the work is done.
 
-Keep in mind that this is a relative simple project. You can create (at least for now) only standard convolutional and feed-forward network. So no convolutional autoencoder (autoencoder with only feed-forward network can be created), GANs, Boltzman Machine or network with multiple branch. The image below show the type of network you can create with my script.
+Keep in mind that this is a relative simple project. You can create (at least for now) only standard convolutional and feed-forward network. So no convolutional autoencoder (autoencoder with only feed-forward network can be created), GANs, Boltzman Machine or network with multiple branch. The image below show the type of network you can create with my script. **If you want you can create single part of this more complicated network with my tool and then stick all together inside a new class**.
 
 ![Which network can you create?](https://github.com/jesus-333/Dynamic-PyTorch-CNN/blob/main/docs/scheme_what_you_can_do.jpg)
 
@@ -22,7 +22,7 @@ In this section I will explain how to use my class to create your network. All t
 * *filters_list*: list of tuple. Each tuple represent the number of input channel and output channel for the layer. For example if you use BGR image as input and you want 9 channel at the end of the first convolution you must write the tuple as (3,9). In case you're lazy (like me) I provided a support function called *convertArrayInTupleList()* that you can use to convert a list of int in the list of tuple necessary for the network. In this case you only need to specify the output filter for each layer (plus the number of input channel). So for example, always with a BGR image as input, you want to perform 3 convolution with, respectively, 9, 27 and 54 as outuput filters. So you can write your *filters_list* as [3, 9, 27, 54]  and the function will convert your list in [(3, 9), (9, 27), (27, 54)]. It must have a length equals to *layers_cnn*.
 * (OPTIONAL) *stride_list*: list of tuple. If you don't know what it is stride don't bother and left it empty. Each tuple represent the stride of the kernel for the current layer. Each tuple must be specified as (stride in height, stride in width). It must have a length equals to *layers_cnn*.
 * (OPTIONAL) *padding_list*: list of tuple. If you don't know what it is padding don't bother and left it empty. Each tuple represent the padding for the current layer. Each tuple must be specified as (padding in height, padding in width). It must have a length equals to *layers_cnn*.
-* (OPTIONAL) *pooling_list*: list of int and tuple. If you don't know what it is polling don't bother and left it empty. Each element of the list represent the pooling for the current layer. If you don't want any pooling in the current layer set the value to -1. Otherwise the input must be in the following form: (*n* , (x, y)) where n represent the type of pooling and (x,y) the kernel of the pooling. *n* = 1 is for the MaxPool2D while *n* = 2 is for the AvgPool2D. It must have a length equals to *layers_cnn*.
+* (OPTIONAL) *pooling_list*: list of int and tuple. If you don't know what it is polling don't bother and left it empty. Each element of the list represent the pooling for the current layer. If you don't want any pooling in the current layer set the value to -1. Otherwise the input must be in the following form: (*n* , (x, y)) where n represent the type of pooling and (x,y) the kernel of the pooling. *n* = 0 is for the MaxPool2D while *n* = 1 is for the AvgPool2D. It must have a length equals to *layers_cnn*.
 * (OPTIONAL) *groups_list*: list of int. If you don't know what it is group don't bother and left it empty. Each int represent the group for the current layer. It must have a length equals to *layers_cnn*.
 * (OPTIONAL) *CNN_normalization_list*: list of bool. Each bool indicate if executing or not a normalization for the output of the convolution of the current layer. It must have a length equals to *layers_cnn*.
 
@@ -63,5 +63,3 @@ N.B. The file must be in the same folder of *DynamicNet.py* and *support_Dynamic
 
 # Citation
 If you use this project please cite me and share this repository :pray: :heart:
-
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/AlbertoZancanaro?locale.x=it_IT)
