@@ -33,10 +33,8 @@ N.B. You can avoid to create all the field with (OPTIONAL) if you don't bother. 
 * *layers_ff*: pretty straightforward. This is the number of feed-forward layer. Must be an int. If set to 0 the network will not have a feed-forward section. It cannot be 0 if also *layers_cnn* is 0.
 * *neurons_list*: list of int. Each number represents the number of neurons for the current layer of the network. The input neurons of the fully connect layer between the cnn and the feedforward part are evaluated in automatic by the class.
 
-**Particular case of feed-forward**: 
-
 ### Common Parameters
-* *activation_list*: lis of int. Each number represent the activation function for the current layer. Generally it must have a length of *layers_cnn* + *layers_ff* + 1. The +1 is derive form the fact that when you flatten the output of the convolutional section and attach that flatten outuput to the feed-forward section you create a new layer in the feed-forward section. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*. The possible values are (you can add more activation modifying the function *getActivationList()* in the *support_DynamicNet.py* file):
+* *activation_list*: lis of int. Each number represent the activation function for the current layer. Generally it must have a length of *layers_cnn* + *layers_ff* + 1. The +1 is derive form the fact that when you flatten the output of the convolutional section and attach that flatten outuput to the feed-forward section you create a new eed-forward layer. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*. The possible values are (you can add more activation modifying the function *getActivationList()* in the *support_DynamicNet.py* file):
   * -1: No activation.
   * 0: ReLU (Rectified Linear Unity).
   * 1: Leaky ReLU.
@@ -52,7 +50,9 @@ N.B. You can avoid to create all the field with (OPTIONAL) if you don't bother. 
 * *dropout_list*: list of float. Specify the dropout probability for each layer. If the entry for the corresponding layer is -1 no dropout will be used. It must have a length of *layers_cnn* + *layers_ff* + 1. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*.
 * *bias_list*: list of bool. Specify if use or not the bias for the current layer (for both cnn section and feed-forward section). It must have a length of *layers_cnn* + *layers_ff* + 1. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*.
   
-N.B. For more info about the various activation function or search for new activaion read this [link](https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity).
+For more info about the various activation function or search for new activaion read this [link](https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity).
+
+*P.S.*: In the general case, when the list have a length of *layers_cnn* + *layers_ff* + 1 the last element is ignored. The needed for the +1 is due to flatten layer.
 
 ## Network and Features visualization
 The class is also provided with a method called *printNetwork()* that print all the structure of the network showing also the "depth" of each layer (pay attention that every transformation of the input will increase the depth of one... for example if we have a convolution followed by a normalizationa and an activation the convolution will be at depth 0, the normalization at depth 1 and the activation at depth 2).
