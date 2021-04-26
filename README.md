@@ -25,6 +25,7 @@ In this section I will explain how to use my class to create your network. All t
 * (OPTIONAL) *pooling_list*: list of int and tuple. If you don't know what it is polling don't bother and left it empty. Each element of the list represent the pooling for the current layer. If you don't want any pooling in the current layer set the value to -1. Otherwise the input must be in the following form: (*n* , (x, y)) where n represent the type of pooling and (x,y) the kernel of the pooling. *n* = 0 is for the MaxPool2D while *n* = 1 is for the AvgPool2D. It must have a length equals to *layers_cnn*.
 * (OPTIONAL) *groups_list*: list of int. If you don't know what it is group don't bother and left it empty. Each int represent the group for the current layer. It must have a length equals to *layers_cnn*.
 * (OPTIONAL) *CNN_normalization_list*: list of bool. Each bool indicate if executing or not a normalization for the output of the convolution of the current layer. It must have a length equals to *layers_cnn*.
+* (OPTIONAL) *add_flatten_layer* bool. In case you create a network with only a cnn section this parameter choose if add or not the flatten layer at the end. By defualt is set to True.
 
 N.B. You can avoid to create all the field with (OPTIONAL) if you don't bother. Also if *layers_cnn* is set to 0 you don't have to specify any of this parameters.
 
@@ -32,8 +33,10 @@ N.B. You can avoid to create all the field with (OPTIONAL) if you don't bother. 
 * *layers_ff*: pretty straightforward. This is the number of feed-forward layer. Must be an int. If set to 0 the network will not have a feed-forward section. It cannot be 0 if also *layers_cnn* is 0.
 * *neurons_list*: list of int. Each number represents the number of neurons for the current layer of the network. The input neurons of the fully connect layer between the cnn and the feedforward part are evaluated in automatic by the class.
 
+**Particular case of feed-forward**: 
+
 ### Common Parameters
-* *activation_list*: lis of int. Each number represent the activation function for the current layer. It must have a length of *layers_cnn* + *layers_ff* + 1. The +1 is derive form the fact that when you flatten the output of the convolutional section and attach that flatten outuput to the feed-forward section you create a new layer in the feed-forward section. In case you don't need the convolutional section the lenght must always be *layers_cnn* + *layers_ff* + 1 and the last element will be ignored. The possible values are (you can add more activation modifying the function *getActivationList()* in the *support_DynamicNet.py* file):
+* *activation_list*: lis of int. Each number represent the activation function for the current layer. Generally it must have a length of *layers_cnn* + *layers_ff* + 1. The +1 is derive form the fact that when you flatten the output of the convolutional section and attach that flatten outuput to the feed-forward section you create a new layer in the feed-forward section. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*. The possible values are (you can add more activation modifying the function *getActivationList()* in the *support_DynamicNet.py* file):
   * -1: No activation.
   * 0: ReLU (Rectified Linear Unity).
   * 1: Leaky ReLU.
@@ -46,8 +49,8 @@ N.B. You can avoid to create all the field with (OPTIONAL) if you don't bother. 
   * 8: Hardshrink
   * 9: LogSoftmax
   * 10: Softmax
-* *dropout_list*: list of float. Specify the dropout probability for each layer. If the entry for the corresponding layer is -1 no dropout will be used. It must have a length of *layers_cnn* + *layers_ff* + 1.
-* *bias_list*: list of bool. Specify if use or not the bias for the current layer (for both cnn section and feed-forward section). It must have a length of *layers_cnn* + *layers_ff* + 1.
+* *dropout_list*: list of float. Specify the dropout probability for each layer. If the entry for the corresponding layer is -1 no dropout will be used. It must have a length of *layers_cnn* + *layers_ff* + 1. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*.
+* *bias_list*: list of bool. Specify if use or not the bias for the current layer (for both cnn section and feed-forward section). It must have a length of *layers_cnn* + *layers_ff* + 1. In case you need only the cnn section ist must have the length *layers_cnn* (*add_flatten_layer* = False) or *layers_cnn + 1* (*add_flatten_layer* = True). In case you need only the feed-forward section ist must have the length *layers_ff*.
   
 N.B. For more info about the various activation function or search for new activaion read this [link](https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity).
 
