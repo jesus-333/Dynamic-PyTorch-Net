@@ -4,7 +4,7 @@ import torch
 
 from DynamicNet import DynamicCNN, convertArrayInTupleList
 
-#%%
+#%% Define the parameters
 
 print_var = False
 tracking_input_dimension = True
@@ -52,6 +52,8 @@ parameters["groups_list"] = [1, F_1, F_1 * D, 1]
 
 parameters["neurons_list"] = [4]
 
+
+#%% Create the network
 
 model = DynamicCNN(parameters, print_var, tracking_input_dimension = tracking_input_dimension)
 
