@@ -10,7 +10,7 @@ print_var = False
 tracking_input_dimension = True
 
 C = 32
-T = 1024
+T = 512
 
 F_1 = 8
 D = 2
@@ -29,7 +29,11 @@ parameters["w"] = T
 parameters["layers_cnn"] = 4 
 parameters["layers_ff"] = 1
 
+# First layer withi no activation
 parameters["activation_list"] = [-1, 0, -1, 0, 9, 9]
+
+# First layer with linear combination of channel as activation
+# parameters["activation_list"] = [12, 0, -1, 0, 9, 9]
 
 parameters["kernel_list"] = [kernel_1, kernel_2, kernel_3, kernel_4]
 
