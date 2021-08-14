@@ -67,4 +67,4 @@ I provided 4 different files where I create some network with my *DynamicNet*. I
 N.B. The file must be in the same folder of *DynamicNet.py* and *support_DynamicNet.py*  
 
 # Citation
-If you use this project please cite me and share this repository :pray: :heart:
+If you use this project please cite this paper [Zancanaro et al.](https://arxiv.org/abs/2105.07917)
